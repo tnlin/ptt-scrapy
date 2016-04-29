@@ -7,5 +7,7 @@ Run this command to luanch crawler
 
 ##Installation
 `brew update`
+
 `brew install mongodb`
+
 `pip3 install Scrapy==1.1.0rc3 pymongo`
