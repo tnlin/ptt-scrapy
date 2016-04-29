@@ -12,7 +12,7 @@ class PTTSpider(scrapy.Spider):
     start_urls = ('https://www.ptt.cc/bbs/Gossiping/index.html', )
 
     _pages = 0
-    MAX_PAGES = 500
+    MAX_PAGES = 2
     
     def start_requests(self):
         for url in self.start_urls:
@@ -72,5 +72,6 @@ class PTTSpider(scrapy.Spider):
         item['comments'] = comments
         item['score'] = total_score
         item['url'] = response.url
-
+        print ( "%s  %-4s %-14s %s" % (item['date'],item['score'],item['author'],item['title']) )
         yield item
+
