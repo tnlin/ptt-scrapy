@@ -41,13 +41,12 @@ class PTTSpider(scrapy.Spider):
         item = PostItem()
         item['author'] = response.xpath(
             '//div[@class="article-metaline"]/span[text()="作者"]/following-sibling::span[1]/text()')[0].extract().split(' ')[0]
-        item['title'] = response.xpath(
-            '//div[@class="article-metaline"]/span[text()="標題"]/following-sibling::span[1]/text()')[0].extract()
+        #Tittle in article-metaline is trancated, so we tage title in og:title
+        item['title'] = response.xpath('//meta[@property="og:title"]/@content')[0].extract()
         datetime_str = response.xpath(
             '//div[@class="article-metaline"]/span[text()="時間"]/following-sibling::span[1]/text()')[0].extract()
         item['date'] = datetime.strptime(datetime_str, '%a %b %d %H:%M:%S %Y')
-        item['content'] = response.xpath(
-            '//div[@id="main-content"]/text()')[0].extract()
+        item['content'] = response.xpath('//div[@id="main-content"]/text()')[0].extract()
         item['ip'] = response.xpath(
             '//div[@id="main-content"]/span[contains(text(),"發信站: 批踢踢實業坊(ptt.cc)")]/text()')[0].extract().rstrip().split(' ')[-1:][0]
         comments = []
@@ -73,5 +72,6 @@ class PTTSpider(scrapy.Spider):
         item['score'] = total_score
         item['url'] = response.url
         print ( "%s  %-4s %-14s %s" % (item['date'],item['score'],item['author'],item['title']) )
+        print (item['content'])
         yield item
 
